@@ -6,13 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/no_tasks_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Task List"
+        android:text="@string/no_tasks"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_tasks_image" />
+
+    <ImageView
+        android:id="@+id/no_tasks_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logo_no_fill" />
 </androidx.constraintlayout.widget.ConstraintLayout>
