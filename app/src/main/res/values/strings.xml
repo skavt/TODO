@@ -8,4 +8,6 @@
     <string name="menu_delete_task">Delete task</string>
     <string name="no_tasks">You have no tasks!</string>
     <string name="all_tasks">All Tasks</string>
+    <string name="task_name">Title</string>
+    <string name="task_text">Enter your task here</string>
 </resources>
