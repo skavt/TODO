@@ -7,4 +7,5 @@
     <string name="menu_clear">Clear completed</string>
     <string name="menu_delete_task">Delete task</string>
     <string name="no_tasks">You have no tasks!</string>
+    <string name="all_tasks">All Tasks</string>
 </resources>
