@@ -1,7 +1,6 @@
 package com.cst.todotasks.db
 
 import androidx.room.*
-import com.cst.todotasks.ui.Task
 import kotlinx.coroutines.flow.Flow
 
 @Dao
