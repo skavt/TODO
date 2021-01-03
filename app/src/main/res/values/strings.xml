@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TODO App</string>
+    <string name="app_name">Todo</string>
     <string name="nav_all">All</string>
     <string name="nav_active">Active</string>
     <string name="nav_completed">Completed</string>

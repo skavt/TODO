@@ -9,5 +9,17 @@
         android:id="@+id/fragment_task_list"
         android:name="com.cst.todotasks.ui.TaskListFragment"
         tools:layout="@layout/fragment_task_list">
+        <action
+            android:id="@+id/action_add_edit_item"
+            app:destination="@id/fragment_add_edit_item" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_add_edit_item"
+        android:name="com.cst.todotasks.ui.AddEditFragment"
+        tools:layout="@layout/fragment_add_edit_item">
+
+        <action
+            android:id="@+id/action_fragment_task_list"
+            app:destination="@id/fragment_task_list" />
     </fragment>
 </navigation>
