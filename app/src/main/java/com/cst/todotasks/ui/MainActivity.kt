@@ -3,7 +3,6 @@ package com.cst.todotasks.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.cst.todotasks.R
-import com.cst.todotasks.extensions.replaceFragment
 
 
 class MainActivity : AppCompatActivity() {
