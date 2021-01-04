@@ -20,6 +20,7 @@
             android:hint="@string/task_name"
             android:inputType="text"
             android:textColor="@color/colorTextPrimary"
+            android:textSize="22sp"
             android:textStyle="bold"
             tools:text="Android" />
 
@@ -32,6 +33,7 @@
             android:hint="@string/task_text"
             android:inputType="text"
             android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
             tools:text="Prepare assignment 4" />
 
     </LinearLayout>
