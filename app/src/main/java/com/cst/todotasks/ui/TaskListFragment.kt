@@ -2,6 +2,7 @@ package com.cst.todotasks.ui
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -22,14 +23,18 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         val view = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
 
-        (activity as MainActivity).apply {
-            val addTask = findViewById<FloatingActionButton>(R.id.add_task)
 
-            addTask.setOnClickListener {
-                title = "New Task"
-                addTask.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_done))
-                findNavController().navigate(R.id.action_add_edit_item)
-            }
+        val addTask = view.findViewById<FloatingActionButton>(R.id.add_task)
+
+        addTask.setOnClickListener {
+            (activity as AppCompatActivity).title = getString(R.string.new_task)
+            addTask.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    view.context,
+                    R.drawable.ic_done
+                )
+            )
+            findNavController().navigate(R.id.action_add_edit_item)
         }
         return view
     }
