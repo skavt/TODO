@@ -15,14 +15,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cst.todotasks.R
+import com.cst.todotasks.db.Task
 import com.cst.todotasks.db.TaskDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Created by nikolozakhvlediani on 12/24/20.
  */
-class TaskListFragment : Fragment(R.layout.fragment_task_list) {
+class TaskListFragment : Fragment(R.layout.fragment_task_list),
+    TaskListAdapter.OnItemClickListener {
 
+    private lateinit var taskListView: View
 
     @SuppressLint("LongLogTag")
     override fun onCreateView(
@@ -30,33 +38,40 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_task_list, container, false)
+        taskListView = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
 
-        val taskItem = view.findViewById<RecyclerView>(R.id.task_item)
-        val allTasks = view.findViewById<LinearLayout>(R.id.all_task_view)
-        val noTasks = view.findViewById<LinearLayout>(R.id.no_tasks_view)
-        val data = TaskDatabase.getDatabaseClient(view.context).taskDao().getTasks()
+        val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
+        val allTasks = taskListView.findViewById<LinearLayout>(R.id.all_task_view)
+        val noTasks = taskListView.findViewById<LinearLayout>(R.id.no_tasks_view)
+        val data = TaskDatabase.getDatabaseClient(taskListView.context).taskDao().getTasks()
 
-        if (data.isNotEmpty()) {
-            taskItem.apply {
-                layoutManager = LinearLayoutManager(context)
-                adapter =
-                    TaskListAdapter(TaskDatabase.getDatabaseClient(context).taskDao().getTasks())
-
+        when {
+            data.isNotEmpty() -> {
+                taskItem.apply {
+                    layoutManager = LinearLayoutManager(context)
+                    adapter = TaskListAdapter(
+                        TaskDatabase.getDatabaseClient(context).taskDao().getTasks(),
+                        this@TaskListFragment
+                    )
+                }
+                allTasks.visibility = VISIBLE
+                noTasks.visibility = GONE
             }
-            allTasks.visibility = VISIBLE
-            noTasks.visibility = GONE
+            else -> {
+                allTasks.visibility = GONE
+                noTasks.visibility = VISIBLE
+            }
         }
 
 
-        val addTask = view.findViewById<FloatingActionButton>(R.id.add_task)
+        val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
 
         addTask.setOnClickListener {
             (activity as AppCompatActivity).title = getString(R.string.new_task)
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
-        return view
+        return taskListView
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
@@ -103,6 +118,21 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
         fun createInstance() = TaskListFragment()
 
+    }
+
+    override fun onItemClick(task: Task) {
+        make(taskListView, getText(R.string.completed), LENGTH_SHORT).show()
+    }
+
+    override fun onCheckBoxClick(task: Task, isChecked: Boolean) {
+        task.isCompleted = isChecked
+        CoroutineScope(Dispatchers.IO).launch {
+            TaskDatabase.getDatabaseClient(taskListView.context).taskDao().update(task)
+        }
+        when {
+            isChecked -> make(taskListView, getText(R.string.completed), LENGTH_SHORT).show()
+            else -> make(taskListView, getText(R.string.active), LENGTH_SHORT).show()
+        }
     }
 
 }
