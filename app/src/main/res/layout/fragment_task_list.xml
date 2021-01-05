@@ -42,7 +42,7 @@
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_tasks"
+        android:id="@+id/task_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

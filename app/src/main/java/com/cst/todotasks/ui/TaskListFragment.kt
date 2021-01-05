@@ -7,13 +7,21 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cst.todotasks.R
+import com.cst.todotasks.db.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_task_list.*
 
 /**
  * Created by nikolozakhvlediani on 12/24/20.
  */
 class TaskListFragment : Fragment(R.layout.fragment_task_list) {
+
+    private lateinit var todoListAdapter: TaskListAdapter
+    private var todoList = mutableListOf<Task>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,6 +31,13 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         val view = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
 
+        view.findViewById<RecyclerView>(R.id.task_item).apply {
+            todoListAdapter =
+                TaskListAdapter(todoList)
+            layoutManager = LinearLayoutManager(context)
+            adapter = todoListAdapter
+
+        }
 
         val addTask = view.findViewById<FloatingActionButton>(R.id.add_task)
 
