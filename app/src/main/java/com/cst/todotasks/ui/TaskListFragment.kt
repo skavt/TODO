@@ -34,7 +34,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
                     R.drawable.ic_done
                 )
             )
-            findNavController().navigate(R.id.action_add_edit_item)
+            findNavController().navigate(R.id.action_taskList_to_addTask)
         }
         return view
     }

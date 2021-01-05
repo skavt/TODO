@@ -10,16 +10,29 @@
         android:name="com.cst.todotasks.ui.TaskListFragment"
         tools:layout="@layout/fragment_task_list">
         <action
-            android:id="@+id/action_add_edit_item"
+            android:id="@+id/action_taskList_to_addTask"
             app:destination="@id/fragment_add_edit_item" />
+        <action
+            android:id="@+id/action_taskList_to_taskDetails"
+            app:destination="@id/fragment_task_details" />
     </fragment>
     <fragment
         android:id="@+id/fragment_add_edit_item"
         android:name="com.cst.todotasks.ui.AddEditFragment"
         tools:layout="@layout/fragment_add_edit_item">
-
         <action
-            android:id="@+id/action_fragment_task_list"
+            android:id="@+id/action_addTask_to_taskList"
             app:destination="@id/fragment_task_list" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_task_details"
+        android:name="com.cst.todotasks.ui.TaskDetailsFragment"
+        tools:layout="@layout/fragment_task_details" >
+        <action
+            android:id="@+id/action_editTask_to_taskList"
+            app:destination="@id/fragment_task_list" />
+        <action
+            android:id="@+id/action_taskDetails_to_taskEdit"
+            app:destination="@id/fragment_add_edit_item" />
     </fragment>
 </navigation>
