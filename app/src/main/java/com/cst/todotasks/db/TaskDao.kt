@@ -16,4 +16,7 @@ interface TaskDao {
 
     @Delete
     suspend fun delete(task: Task)
+
+    @Query("DELETE FROM todo_tasks WHERE is_completed = 1")
+    suspend fun deleteCompletedTasks()
 }

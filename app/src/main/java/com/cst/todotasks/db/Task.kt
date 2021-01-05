@@ -1,5 +1,6 @@
 package com.cst.todotasks.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -7,7 +8,7 @@ import androidx.room.PrimaryKey
 
 data class Task(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val name: String,
-    val description: String,
-    val isCompleted: Boolean = false
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "is_completed") val isCompleted: Boolean = false
 )
