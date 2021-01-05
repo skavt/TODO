@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <CheckBox
         android:id="@+id/check_box_completed"
@@ -19,12 +19,13 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/check_box_completed"
         android:layout_alignBottom="@id/check_box_completed"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/check_box_completed"
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
         android:textColor="@color/colorTextPrimary"
+        android:textSize="18sp"
         tools:text="Android" />
 
 </RelativeLayout>

@@ -1,28 +1,30 @@
 package com.cst.todotasks.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cst.todotasks.R
-import com.cst.todotasks.db.Task
+import com.cst.todotasks.db.TaskDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_task_list.*
 
 /**
  * Created by nikolozakhvlediani on 12/24/20.
  */
 class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
-    private lateinit var todoListAdapter: TaskListAdapter
-    private var todoList = mutableListOf<Task>()
 
+    @SuppressLint("LongLogTag")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,13 +33,22 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
         val view = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
 
-        view.findViewById<RecyclerView>(R.id.task_item).apply {
-            todoListAdapter =
-                TaskListAdapter(todoList)
-            layoutManager = LinearLayoutManager(context)
-            adapter = todoListAdapter
+        val taskItem = view.findViewById<RecyclerView>(R.id.task_item)
+        val allTasks = view.findViewById<LinearLayout>(R.id.all_task_view)
+        val noTasks = view.findViewById<LinearLayout>(R.id.no_tasks_view)
+        val data = TaskDatabase.getDatabaseClient(view.context).taskDao().getTasks()
 
+        if (data.isNotEmpty()) {
+            taskItem.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter =
+                    TaskListAdapter(TaskDatabase.getDatabaseClient(context).taskDao().getTasks())
+
+            }
+            allTasks.visibility = VISIBLE
+            noTasks.visibility = GONE
         }
+
 
         val addTask = view.findViewById<FloatingActionButton>(R.id.add_task)
 
