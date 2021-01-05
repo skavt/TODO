@@ -11,10 +11,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cst.todotasks.R
+import com.cst.todotasks.db.Actions
 import com.cst.todotasks.db.Task
 import com.cst.todotasks.db.TaskDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,12 +50,14 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
 
         when {
             data.isNotEmpty() -> {
-                taskItem.apply {
-                    layoutManager = LinearLayoutManager(context)
-                    adapter = TaskListAdapter(
-                        TaskDatabase.getDatabaseClient(context).taskDao().getTasks(),
-                        this@TaskListFragment
-                    )
+                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                    taskItem.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = TaskListAdapter(
+                            Actions.getTasks(context),
+                            this@TaskListFragment
+                        )
+                    }
                 }
                 allTasks.visibility = VISIBLE
                 noTasks.visibility = GONE
@@ -126,9 +130,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
 
     override fun onCheckBoxClick(task: Task, isChecked: Boolean) {
         task.isCompleted = isChecked
-        CoroutineScope(Dispatchers.IO).launch {
-            TaskDatabase.getDatabaseClient(taskListView.context).taskDao().update(task)
-        }
+        Actions.update(taskListView.context, task)
         when {
             isChecked -> make(taskListView, getText(R.string.completed), LENGTH_SHORT).show()
             else -> make(taskListView, getText(R.string.active), LENGTH_SHORT).show()
