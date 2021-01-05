@@ -12,4 +12,6 @@
     <string name="task_text">Enter your task here</string>
     <string name="new_task">New Task</string>
     <string name="todo">Todo</string>
+    <string name="required">Title is required</string>
+    <string name="text_added">Text added</string>
 </resources>

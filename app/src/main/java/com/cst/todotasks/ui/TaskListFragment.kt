@@ -43,12 +43,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list) {
 
         addTask.setOnClickListener {
             (activity as AppCompatActivity).title = getString(R.string.new_task)
-            addTask.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    view.context,
-                    R.drawable.ic_done
-                )
-            )
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
         return view
