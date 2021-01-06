@@ -43,7 +43,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     ): View {
         taskListView = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).title = getString(R.string.todo)
+        (activity as AppCompatActivity).title = getString(R.string.app_name)
 
         val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
 
@@ -82,7 +82,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
 
         addTask.setOnClickListener {
             taskLiveData.postTask(null)
-            (activity as AppCompatActivity).title = getString(R.string.new_task)
+            (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
         return taskListView
@@ -159,8 +159,8 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         task.isCompleted = isChecked
         Actions.update(taskListView.context, task)
         when {
-            isChecked -> make(taskListView, getText(R.string.completed), LENGTH_SHORT).show()
-            else -> make(taskListView, getText(R.string.active), LENGTH_SHORT).show()
+            isChecked -> make(taskListView, getText(R.string.snack_completed), LENGTH_SHORT).show()
+            else -> make(taskListView, getText(R.string.snack_active), LENGTH_SHORT).show()
         }
     }
 

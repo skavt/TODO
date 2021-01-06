@@ -15,7 +15,6 @@ import com.cst.todotasks.db.Actions
 import com.cst.todotasks.db.Task
 import com.cst.todotasks.db.TaskLiveData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.*
 
 class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
@@ -30,7 +29,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
         savedInstanceState: Bundle?
     ): View {
         taskView = inflater.inflate(R.layout.fragment_task_details, container, false)
-        (activity as AppCompatActivity).title = getString(R.string.details)
+        (activity as AppCompatActivity).title = getString(R.string.app_name_details)
         setHasOptionsMenu(true)
 
         val title = taskView.findViewById<TextView>(R.id.details_name)
@@ -48,13 +47,13 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
                 it.isCompleted = checkbox.isChecked
                 Actions.update(taskView.context, it)
                 when {
-                    isChecked -> make(taskView, getText(R.string.completed), LENGTH_SHORT).show()
-                    else -> make(taskView, getText(R.string.active), LENGTH_SHORT).show()
+                    isChecked -> make(taskView, getText(R.string.snack_completed), LENGTH_SHORT).show()
+                    else -> make(taskView, getText(R.string.snack_active), LENGTH_SHORT).show()
                 }
             }
 
             editTask.setOnClickListener { item ->
-                (activity as AppCompatActivity).title = getString(R.string.edit_task)
+                (activity as AppCompatActivity).title = getString(R.string.app_name_edit_task)
                 it.let { task -> taskLiveData.postTask(task) }
                 item.findNavController().navigate(R.id.fragment_add_edit_item)
             }
@@ -69,7 +68,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
                 context?.let {
                     selectedTask?.let { task -> Actions.delete(it, task) }
                     taskLiveData.getTasks(it)
-                    make(taskView, getText(R.string.deleted_task), LENGTH_SHORT).show()
+                    make(taskView, getText(R.string.task_deleted), LENGTH_SHORT).show()
                     findNavController().navigate(R.id.fragment_task_list)
                 }
                 true

@@ -4,6 +4,6 @@
     <item
         android:id="@+id/delete_task"
         android:icon="@drawable/trash_icon"
-        android:title="@string/delete"
+        android:title="@string/menu_delete_task"
         app:showAsAction="always" />
 </menu>

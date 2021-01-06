@@ -6,22 +6,27 @@
     <string name="menu_filter">Filter</string>
     <string name="menu_clear">Clear completed</string>
     <string name="menu_delete_task">Delete task</string>
+
     <string name="no_tasks">You have no tasks!</string>
     <string name="all_tasks">All Tasks</string>
-    <string name="task_name">Title</string>
-    <string name="task_text">Enter your task here</string>
-    <string name="new_task">New Task</string>
-    <string name="todo">Todo</string>
+
+    <string name="hint_name">Title</string>
+    <string name="hint_description">Enter your task here</string>
+
+    <string name="app_name_new_task">New Task</string>
+    <string name="app_name_edit_task">Edit Task</string>
+    <string name="app_name_details">Task Details</string>
+
     <string name="required">Both of fields are required</string>
+
     <string name="task_added">Task added</string>
     <string name="task_edited">Task edited</string>
-    <string name="completed">Task marked completed</string>
-    <string name="active">Task marked active</string>
+    <string name="task_deleted">Task was deleted</string>
+
+    <string name="snack_completed">Task marked completed</string>
+    <string name="snack_active">Task marked active</string>
+
     <string name="active_tasks">Active Tasks</string>
     <string name="completed_tasks">Completed Tasks</string>
     <string name="delete_completed_tasks">Completed tasks cleared</string>
-    <string name="details">Task Details</string>
-    <string name="edit_task">Edit Task</string>
-    <string name="delete">Delete</string>
-    <string name="deleted_task">Task was deleted</string>
 </resources>
