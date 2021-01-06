@@ -37,7 +37,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
         val description = taskView.findViewById<TextView>(R.id.details_description)
         val editTask = taskView.findViewById<FloatingActionButton>(R.id.edit_task)
 
-        taskLiveData.taskLiveData.observe(viewLifecycleOwner, {
+        taskLiveData.itemData.observe(viewLifecycleOwner, {
             selectedTask = it
             title.text = it.name
             checkbox.isChecked = it.isCompleted
@@ -54,7 +54,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
 
             editTask.setOnClickListener { item ->
                 (activity as AppCompatActivity).title = getString(R.string.app_name_edit_task)
-                it.let { task -> taskLiveData.postTask(task) }
+                it.let { task -> taskLiveData.saveTask(task) }
                 item.findNavController().navigate(R.id.fragment_add_edit_item)
             }
         })

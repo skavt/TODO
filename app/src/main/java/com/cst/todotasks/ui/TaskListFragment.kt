@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -42,26 +41,28 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         savedInstanceState: Bundle?
     ): View {
         taskListView = inflater.inflate(R.layout.fragment_task_list, container, false)
-        setHasOptionsMenu(true)
         (activity as AppCompatActivity).title = getString(R.string.app_name)
+        setHasOptionsMenu(true)
 
         val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
+        val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
+
+        addTask.setOnClickListener {
+            taskLiveData.saveTask(null)
+            (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
+            findNavController().navigate(R.id.action_taskList_to_addTask)
+        }
 
         allTasks = taskListView.findViewById(R.id.all_task_view)
         noTasks = taskListView.findViewById(R.id.no_tasks_view)
         listHeader = taskListView.findViewById(R.id.all_tasks)
 
-        taskLiveData.tasksLiveData.observe(viewLifecycleOwner, {
+        taskLiveData.todoListData.observe(viewLifecycleOwner, {
             when {
                 it.isNotEmpty() -> {
-                    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                        taskItem.apply {
-                            layoutManager = LinearLayoutManager(context)
-                            adapter = TaskListAdapter(
-                                it,
-                                this@TaskListFragment
-                            )
-                        }
+                    taskItem.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = TaskListAdapter(it, this@TaskListFragment)
                     }
                     when {
                         !isFiltered -> data = it
@@ -78,13 +79,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         })
         context?.let { taskLiveData.getTasks(it) }
 
-        val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
-
-        addTask.setOnClickListener {
-            taskLiveData.postTask(null)
-            (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
-            findNavController().navigate(R.id.action_taskList_to_addTask)
-        }
         return taskListView
     }
 
@@ -147,11 +141,11 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     private fun filterTasks(text: String, filteredData: List<Task>) {
         listHeader.text = text
         isFiltered = true
-        taskLiveData.postTasks(filteredData)
+        taskLiveData.saveTasks(filteredData)
     }
 
     override fun onItemClick(task: Task) {
-        taskLiveData.postTask(task)
+        taskLiveData.saveTask(task)
         taskListView.findNavController().navigate(R.id.action_taskList_to_taskDetails)
     }
 

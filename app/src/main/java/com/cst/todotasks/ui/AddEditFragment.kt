@@ -30,7 +30,7 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
         val title = view.findViewById<EditText>(R.id.task_name)
         val desc = view.findViewById<EditText>(R.id.description)
 
-        taskLiveData.taskLiveData.observe(viewLifecycleOwner, {
+        taskLiveData.itemData.observe(viewLifecycleOwner, {
             task = it
             when (task) {
                 null -> {
