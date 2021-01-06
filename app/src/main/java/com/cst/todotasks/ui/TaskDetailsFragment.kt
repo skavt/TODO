@@ -15,13 +15,14 @@ import com.cst.todotasks.db.Actions
 import com.cst.todotasks.db.Task
 import com.cst.todotasks.db.TaskLiveData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar.*
+import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
+import com.google.android.material.snackbar.Snackbar.make
 
 class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
 
     private lateinit var taskView: View
+    private var taskData: Task? = null
     private val taskLiveData: TaskLiveData by navGraphViewModels(R.id.todo_nav)
-    private var selectedTask: Task? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,28 +35,33 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
 
         val title = taskView.findViewById<TextView>(R.id.details_name)
         val checkbox = taskView.findViewById<CheckBox>(R.id.details_checkbox)
-        val description = taskView.findViewById<TextView>(R.id.details_description)
+        val desc = taskView.findViewById<TextView>(R.id.details_description)
         val editTask = taskView.findViewById<FloatingActionButton>(R.id.edit_task)
 
-        taskLiveData.itemData.observe(viewLifecycleOwner, {
-            selectedTask = it
-            title.text = it.name
-            checkbox.isChecked = it.isCompleted
-            description.text = it.description
+        taskLiveData.itemData.observe(viewLifecycleOwner, { task ->
+            with(task) {
+                taskData = task
 
-            checkbox.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
-                it.isCompleted = checkbox.isChecked
-                Actions.update(taskView.context, it)
-                when {
-                    isChecked -> make(taskView, getText(R.string.snack_completed), LENGTH_SHORT).show()
-                    else -> make(taskView, getText(R.string.snack_active), LENGTH_SHORT).show()
+                title.text = name
+                desc.text = description
+                checkbox.isChecked = isCompleted
+
+                checkbox.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
+                    isCompleted = checkbox.isChecked
+                    Actions.update(taskView.context, task)
+                    when {
+                        isChecked -> make(
+                            taskView, getText(R.string.snack_completed), LENGTH_SHORT
+                        ).show()
+                        else -> make(taskView, getText(R.string.snack_active), LENGTH_SHORT).show()
+                    }
                 }
-            }
 
-            editTask.setOnClickListener { item ->
-                (activity as AppCompatActivity).title = getString(R.string.app_name_edit_task)
-                it.let { task -> taskLiveData.saveTask(task) }
-                item.findNavController().navigate(R.id.fragment_add_edit_item)
+                editTask.setOnClickListener { item ->
+                    (activity as AppCompatActivity).title = getString(R.string.app_name_edit_task)
+                    taskLiveData.saveTask(task)
+                    item.findNavController().navigate(R.id.fragment_add_edit_item)
+                }
             }
         })
 
@@ -65,9 +71,9 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             R.id.delete_task -> {
-                context?.let {
-                    selectedTask?.let { task -> Actions.delete(it, task) }
-                    taskLiveData.getTasks(it)
+                taskData?.let {
+                    Actions.delete(taskView.context, it)
+                    taskLiveData.getTasks(taskView.context)
                     make(taskView, getText(R.string.task_deleted), LENGTH_SHORT).show()
                     findNavController().navigate(R.id.fragment_task_list)
                 }

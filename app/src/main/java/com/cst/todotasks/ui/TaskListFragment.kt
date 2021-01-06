@@ -47,25 +47,19 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
         val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
 
-        addTask.setOnClickListener {
-            taskLiveData.saveTask(null)
-            (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
-            findNavController().navigate(R.id.action_taskList_to_addTask)
-        }
-
         allTasks = taskListView.findViewById(R.id.all_task_view)
         noTasks = taskListView.findViewById(R.id.no_tasks_view)
         listHeader = taskListView.findViewById(R.id.all_tasks)
 
-        taskLiveData.todoListData.observe(viewLifecycleOwner, {
+        taskLiveData.todoListData.observe(viewLifecycleOwner, { task ->
             when {
-                it.isNotEmpty() -> {
+                task.isNotEmpty() -> {
                     taskItem.apply {
                         layoutManager = LinearLayoutManager(context)
-                        adapter = TaskListAdapter(it, this@TaskListFragment)
+                        adapter = TaskListAdapter(task, this@TaskListFragment)
                     }
                     when {
-                        !isFiltered -> data = it
+                        !isFiltered -> data = task
                     }
                     isFiltered = false
                     allTasks.visibility = VISIBLE
@@ -77,7 +71,14 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
                 }
             }
         })
-        context?.let { taskLiveData.getTasks(it) }
+
+        taskLiveData.getTasks(taskListView.context)
+
+        addTask.setOnClickListener {
+            taskLiveData.saveTask(null)
+            (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
+            findNavController().navigate(R.id.action_taskList_to_addTask)
+        }
 
         return taskListView
     }
@@ -85,15 +86,9 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             R.id.menu_clear -> {
-                context?.let {
-                    Actions.deleteCompletedTasks(it)
-                    taskLiveData.getTasks(it)
-                    make(
-                        taskListView,
-                        getText(R.string.delete_completed_tasks),
-                        LENGTH_SHORT
-                    ).show()
-                }
+                Actions.deleteCompletedTasks(taskListView.context)
+                taskLiveData.getTasks(taskListView.context)
+                make(taskListView, getText(R.string.delete_completed_tasks), LENGTH_SHORT).show()
                 true
             }
             R.id.menu_filter -> {
