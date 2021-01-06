@@ -23,7 +23,7 @@ class Actions {
             TaskDatabase.getDatabaseClient(context).taskDao().deleteCompletedTasks()
         }
 
-        suspend fun delete(context: Context, task: Task) {
+        fun delete(context: Context, task: Task) {
             TaskDatabase.getDatabaseClient(context).taskDao().delete(task)
         }
 

@@ -105,6 +105,10 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
                 showFilteringPopUpMenu()
                 true
             }
+            R.id.delete_task -> {
+                showFilteringPopUpMenu()
+                true
+            }
             else -> false
         }
 
@@ -143,12 +147,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         listHeader.text = text
         isFiltered = true
         taskLiveData.postTasks(filteredData)
-    }
-
-    companion object {
-
-        fun createInstance() = TaskListFragment()
-
     }
 
     override fun onItemClick(task: Task) {

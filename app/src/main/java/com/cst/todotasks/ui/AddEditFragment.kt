@@ -33,7 +33,7 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
 
         saveTask.setOnClickListener {
             when {
-                title.text.isNotEmpty() -> {
+                title.text.isNotEmpty() && description.text.isNotEmpty() -> {
                     Actions.insert(
                         view.context,
                         Task(

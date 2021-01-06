@@ -12,7 +12,7 @@
     <string name="task_text">Enter your task here</string>
     <string name="new_task">New Task</string>
     <string name="todo">Todo</string>
-    <string name="required">Title is required</string>
+    <string name="required">Both of fields are required</string>
     <string name="text_added">Text added</string>
     <string name="completed">Task marked completed</string>
     <string name="active">Task marked active</string>
@@ -20,4 +20,7 @@
     <string name="completed_tasks">Completed Tasks</string>
     <string name="delete_completed_tasks">Completed tasks cleared</string>
     <string name="details">Task Details</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="delete">Delete</string>
+    <string name="deleted_task">Task was deleted</string>
 </resources>
