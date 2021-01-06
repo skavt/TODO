@@ -43,6 +43,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     ): View {
         taskListView = inflater.inflate(R.layout.fragment_task_list, container, false)
         setHasOptionsMenu(true)
+        (activity as AppCompatActivity).title = getString(R.string.todo)
 
         val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
 
@@ -80,7 +81,6 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
 
         addTask.setOnClickListener {
-            (activity as AppCompatActivity).title = getString(R.string.new_task)
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
         return taskListView

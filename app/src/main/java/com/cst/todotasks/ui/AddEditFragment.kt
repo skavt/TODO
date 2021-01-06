@@ -27,7 +27,7 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_add_edit_item, container, false)
-
+        (activity as AppCompatActivity).title = getString(R.string.new_task)
         val saveTask = view.findViewById<FloatingActionButton>(R.id.save_task)
         val title = view.findViewById<EditText>(R.id.task_name)
         val description = view.findViewById<EditText>(R.id.description)
@@ -35,19 +35,16 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
         saveTask.setOnClickListener {
             when {
                 title.text.isNotEmpty() -> {
-                    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                        Actions.insert(
-                            view.context,
-                            Task(
-                                name = title.text.toString(),
-                                description = description.text.toString(),
-                                isCompleted = false
-                            )
+                    Actions.insert(
+                        view.context,
+                        Task(
+                            name = title.text.toString(),
+                            description = description.text.toString(),
+                            isCompleted = false
                         )
-                        (activity as AppCompatActivity).title = getString(R.string.todo)
-                        findNavController().navigate(R.id.action_addTask_to_taskList)
-                        make(requireView(), getText(R.string.text_added), LENGTH_SHORT).show()
-                    }
+                    )
+                    findNavController().navigate(R.id.action_addTask_to_taskList)
+                    make(requireView(), getText(R.string.text_added), LENGTH_SHORT).show()
                 }
                 else -> {
                     make(it, getText(R.string.required), LENGTH_SHORT).show()
