@@ -17,8 +17,7 @@ import com.google.android.material.snackbar.Snackbar.*
 
 class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
 
-    private lateinit var taskView: View
-    private var task : Task? = null
+    private var task: Task? = null
     private val taskLiveData: TaskLiveData by navGraphViewModels(R.id.todo_nav)
 
     override fun onCreateView(
@@ -26,10 +25,10 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        taskView = inflater.inflate(R.layout.fragment_add_edit_item, container, false)
-        val saveTask = taskView.findViewById<FloatingActionButton>(R.id.save_task)
-        val title = taskView.findViewById<EditText>(R.id.task_name)
-        val desc = taskView.findViewById<EditText>(R.id.description)
+        val view = inflater.inflate(R.layout.fragment_add_edit_item, container, false)
+        val saveTask = view.findViewById<FloatingActionButton>(R.id.save_task)
+        val title = view.findViewById<EditText>(R.id.task_name)
+        val desc = view.findViewById<EditText>(R.id.description)
 
         taskLiveData.taskLiveData.observe(viewLifecycleOwner, {
             task = it
@@ -55,18 +54,21 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
                                 description = desc.text.toString(),
                                 isCompleted = false
                             )
-                            context?.let { context -> Actions.insert(context, task!!) }
-                            make(taskView, getText(R.string.task_added), LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.fragment_task_list)
+                            context?.let { context ->
+                                Actions.insert(context, task!!)
+                                make(it, getText(R.string.task_added), LENGTH_SHORT).show()
+                            }
                         }
                         else -> {
                             task!!.name = title.text.toString()
                             task!!.description = desc.text.toString()
-                            context?.let { context -> Actions.update(context, task!!) }
-                            make(taskView, getText(R.string.task_edited), LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.fragment_task_list)
+                            context?.let { context ->
+                                Actions.update(context, task!!)
+                                make(it, getText(R.string.task_edited), LENGTH_SHORT).show()
+                            }
                         }
                     }
+                    findNavController().navigate(R.id.fragment_task_list)
                 }
                 else -> {
                     make(it, getText(R.string.required), LENGTH_SHORT).show()
@@ -76,6 +78,6 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
             }
         }
 
-        return taskView
+        return view
     }
 }
