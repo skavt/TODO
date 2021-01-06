@@ -56,7 +56,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
             editTask.setOnClickListener { item ->
                 (activity as AppCompatActivity).title = getString(R.string.edit_task)
                 it.let { task -> taskLiveData.postTask(task) }
-                item.findNavController().navigate(R.id.action_taskDetails_to_taskEdit)
+                item.findNavController().navigate(R.id.fragment_add_edit_item)
             }
         })
 
