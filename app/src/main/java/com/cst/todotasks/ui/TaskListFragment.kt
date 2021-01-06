@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cst.todotasks.R
 import com.cst.todotasks.db.Actions
 import com.cst.todotasks.db.Task
-import com.cst.todotasks.db.TaskDatabase
+import com.cst.todotasks.db.TaskLiveData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar.*
 
@@ -29,6 +30,11 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
 
     private lateinit var taskListView: View
     private lateinit var listHeader: TextView
+    private lateinit var allTasks: LinearLayout
+    private lateinit var noTasks: LinearLayout
+    private lateinit var data: List<Task>
+    private var isFiltered: Boolean = false
+    private val taskLiveData: TaskLiveData by navGraphViewModels(R.id.todo_nav)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,31 +45,37 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         setHasOptionsMenu(true)
 
         val taskItem = taskListView.findViewById<RecyclerView>(R.id.task_item)
-        val allTasks = taskListView.findViewById<LinearLayout>(R.id.all_task_view)
-        val noTasks = taskListView.findViewById<LinearLayout>(R.id.no_tasks_view)
-        val data = TaskDatabase.getDatabaseClient(taskListView.context).taskDao().getTasks()
+
+        allTasks = taskListView.findViewById(R.id.all_task_view)
+        noTasks = taskListView.findViewById(R.id.no_tasks_view)
         listHeader = taskListView.findViewById(R.id.all_tasks)
 
-        when {
-            data.isNotEmpty() -> {
-                viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                    taskItem.apply {
-                        layoutManager = LinearLayoutManager(context)
-                        adapter = TaskListAdapter(
-                            Actions.getTasks(context),
-                            this@TaskListFragment
-                        )
+        taskLiveData.tasksLiveData.observe(viewLifecycleOwner, {
+            when {
+                it.isNotEmpty() -> {
+                    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                        taskItem.apply {
+                            layoutManager = LinearLayoutManager(context)
+                            adapter = TaskListAdapter(
+                                it,
+                                this@TaskListFragment
+                            )
+                        }
                     }
+                    when {
+                        !isFiltered -> data = it
+                    }
+                    isFiltered = false
+                    allTasks.visibility = VISIBLE
+                    noTasks.visibility = GONE
                 }
-                allTasks.visibility = VISIBLE
-                noTasks.visibility = GONE
+                else -> {
+                    allTasks.visibility = GONE
+                    noTasks.visibility = VISIBLE
+                }
             }
-            else -> {
-                allTasks.visibility = GONE
-                noTasks.visibility = VISIBLE
-            }
-        }
-
+        })
+        context?.let { taskLiveData.getTasks(it) }
 
         val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
 
@@ -96,25 +108,32 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         PopupMenu(requireContext(), view).run {
             menuInflater.inflate(R.menu.filter_tasks, menu)
 
-            setOnMenuItemClickListener {
-                when (it.itemId) {
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
                     R.id.active -> {
-                        listHeader.text = getText(R.string.active_tasks)
-                        // TODO თქვენი კოდი
+                        filterTasks(
+                            getText(R.string.active_tasks) as String,
+                            data.filter { !it.isCompleted })
                     }
                     R.id.completed -> {
-                        listHeader.text = getText(R.string.completed_tasks)
-                        // TODO თქვენი კოდი
+                        filterTasks(
+                            getText(R.string.completed_tasks) as String,
+                            data.filter { it.isCompleted })
                     }
                     else -> {
-                        listHeader.text = getText(R.string.all_tasks)
-                        // TODO თქვენი კოდი
+                        filterTasks(getText(R.string.all_tasks) as String, data)
                     }
                 }
                 true
             }
             show()
         }
+    }
+
+    private fun filterTasks(text: String, filteredData: List<Task>) {
+        listHeader.text = text
+        isFiltered = true
+        taskLiveData.postTasks(filteredData)
     }
 
     companion object {
@@ -124,6 +143,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     }
 
     override fun onItemClick(task: Task) {
+        taskLiveData.postTask(task)
         taskListView.findNavController().navigate(R.id.action_taskList_to_taskDetails)
     }
 
