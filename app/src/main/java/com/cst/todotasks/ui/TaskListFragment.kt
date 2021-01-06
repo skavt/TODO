@@ -1,8 +1,6 @@
 package com.cst.todotasks.ui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -12,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,11 +19,7 @@ import com.cst.todotasks.db.Actions
 import com.cst.todotasks.db.Task
 import com.cst.todotasks.db.TaskDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 /**
  * Created by nikolozakhvlediani on 12/24/20.
@@ -33,8 +28,8 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     TaskListAdapter.OnItemClickListener {
 
     private lateinit var taskListView: View
+    private lateinit var listHeader: TextView
 
-    @SuppressLint("LongLogTag")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,6 +42,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         val allTasks = taskListView.findViewById<LinearLayout>(R.id.all_task_view)
         val noTasks = taskListView.findViewById<LinearLayout>(R.id.no_tasks_view)
         val data = TaskDatabase.getDatabaseClient(taskListView.context).taskDao().getTasks()
+        listHeader = taskListView.findViewById(R.id.all_tasks)
 
         when {
             data.isNotEmpty() -> {
@@ -103,12 +99,15 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
             setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.active -> {
+                        listHeader.text = getText(R.string.active_tasks)
                         // TODO თქვენი კოდი
                     }
                     R.id.completed -> {
+                        listHeader.text = getText(R.string.completed_tasks)
                         // TODO თქვენი კოდი
                     }
                     else -> {
+                        listHeader.text = getText(R.string.all_tasks)
                         // TODO თქვენი კოდი
                     }
                 }
@@ -125,7 +124,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     }
 
     override fun onItemClick(task: Task) {
-        make(taskListView, getText(R.string.completed), LENGTH_SHORT).show()
+        taskListView.findNavController().navigate(R.id.action_taskList_to_taskDetails)
     }
 
     override fun onCheckBoxClick(task: Task, isChecked: Boolean) {
