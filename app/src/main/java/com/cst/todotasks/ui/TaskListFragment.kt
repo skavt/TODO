@@ -75,7 +75,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         taskLiveData.getTasks(taskListView.context)
 
         addTask.setOnClickListener {
-            taskLiveData.saveTask(null)
+            taskLiveData.setTask(null)
             (activity as AppCompatActivity).title = getString(R.string.app_name_new_task)
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
@@ -136,11 +136,11 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     private fun filterTasks(text: String, filteredData: List<Task>) {
         listHeader.text = text
         isFiltered = true
-        taskLiveData.saveTasks(filteredData)
+        taskLiveData.setTasks(filteredData)
     }
 
     override fun onItemClick(task: Task) {
-        taskLiveData.saveTask(task)
+        taskLiveData.setTask(task)
         taskListView.findNavController().navigate(R.id.action_taskList_to_taskDetails)
     }
 

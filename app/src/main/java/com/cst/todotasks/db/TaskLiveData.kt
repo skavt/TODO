@@ -14,15 +14,15 @@ class TaskLiveData : ViewModel() {
     val itemData: LiveData<Task>
         get() = _itemData
 
-    fun saveTask(task: Task?) {
+    fun setTask(task: Task?) {
         _itemData.postValue(task)
     }
 
-    fun saveTasks(tasks: List<Task>?) {
+    fun setTasks(tasks: List<Task>?) {
         _todoListData.postValue(tasks)
     }
 
     fun getTasks(context: Context) {
-        saveTasks(Actions.getTasks(context))
+        setTasks(Actions.getTasks(context))
     }
 }

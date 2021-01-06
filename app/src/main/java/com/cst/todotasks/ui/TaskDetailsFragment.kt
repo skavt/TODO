@@ -59,7 +59,7 @@ class TaskDetailsFragment : Fragment(R.layout.fragment_task_details) {
 
                 editTask.setOnClickListener { item ->
                     (activity as AppCompatActivity).title = getString(R.string.app_name_edit_task)
-                    taskLiveData.saveTask(task)
+                    taskLiveData.setTask(task)
                     item.findNavController().navigate(R.id.fragment_add_edit_item)
                 }
             }
