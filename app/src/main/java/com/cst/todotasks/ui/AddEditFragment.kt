@@ -46,7 +46,7 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
                         )
                         (activity as AppCompatActivity).title = getString(R.string.todo)
                         findNavController().navigate(R.id.action_addTask_to_taskList)
-                        make(it, getText(R.string.text_added), LENGTH_SHORT).show()
+                        make(requireView(), getText(R.string.text_added), LENGTH_SHORT).show()
                     }
                 }
                 else -> {
