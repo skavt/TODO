@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:text="@string/all_tasks"
             android:textColor="@color/colorTextPrimary"
             android:textSize="20sp" />
@@ -49,8 +49,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/task_item"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
