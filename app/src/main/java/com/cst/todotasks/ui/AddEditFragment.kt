@@ -27,7 +27,6 @@ class AddEditFragment : Fragment(R.layout.fragment_add_edit_item) {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_add_edit_item, container, false)
-        (activity as AppCompatActivity).title = getString(R.string.new_task)
         val saveTask = view.findViewById<FloatingActionButton>(R.id.save_task)
         val title = view.findViewById<EditText>(R.id.task_name)
         val description = view.findViewById<EditText>(R.id.description)

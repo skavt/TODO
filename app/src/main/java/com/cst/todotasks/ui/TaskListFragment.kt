@@ -81,6 +81,7 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
         val addTask = taskListView.findViewById<FloatingActionButton>(R.id.add_task)
 
         addTask.setOnClickListener {
+            (activity as AppCompatActivity).title = getString(R.string.new_task)
             findNavController().navigate(R.id.action_taskList_to_addTask)
         }
         return taskListView
