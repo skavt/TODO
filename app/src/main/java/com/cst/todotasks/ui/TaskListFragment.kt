@@ -89,7 +89,15 @@ class TaskListFragment : Fragment(R.layout.fragment_task_list),
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             R.id.menu_clear -> {
-                // TODO თქვენი კოდი
+                context?.let {
+                    Actions.deleteCompletedTasks(it)
+                    taskLiveData.getTasks(it)
+                    make(
+                        taskListView,
+                        getText(R.string.delete_completed_tasks),
+                        LENGTH_SHORT
+                    ).show()
+                }
                 true
             }
             R.id.menu_filter -> {
